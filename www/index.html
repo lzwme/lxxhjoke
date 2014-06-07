@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html><!-- manifest="lxxh.manifest"-->
+    <head>
+        <meta charset="utf-8" />
+        <title>离线笑话</title>
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!--meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=1" /-->
+        <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!--for ios webapp-->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="apple-touch-precomposed" href="img/logo.png">
+
+<!--link rel="apple-touch-startup-image" sizes="2048x1496" href="img/icon/2048x1496.png" media="screen and (min-device-width: 1025px) and (max-device-width: 2048px) and (orientation:landscape) and (-webkit-min-device-pixel-ratio: 2)"-->
+<link rel="apple-touch-startup-image" href="img/screen.png">
+<!--//for ios webapp-->
+        <link rel="stylesheet" type="text/css" href="lib/jquery.mobile/jquery.mobile-1.4.2.min.css" />
+        <style type="text/css">
+        .ui-header-fixed, .ui-footer-fixed{
+          z-index: 50
+        }
+        </style>
+
+      <script type="text/javascript" src="lib/jquery/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="js/index.js"></script>
+      <script type="text/javascript">
+          app.initialize();
+      </script>
+      <script type="text/javascript" src="lib/jquery.mobile/jquery.mobile-1.4.2.min.js"></script>
+    </head>
+<body>
+<!--文章列表页面-->
+<div data-role="page" id="list">
+    <div data-role="header" data-position="fixed">
+        <a href="#" data-role="button" data-direction="reverse" id="list_process"></a>
+        <h1>离线笑话</h1>
+        <a data-rel="back" data-iconpos="notext" data-direction="reverse" data-icon="back"></a>
+    </div>
+    <div data-role="content">
+        <div id="resultList"></div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#list" pid="1" data-icon="home" data-transition="flow">首页</a></li>
+          <li><a href="#" id="page_prev" pid="0" pz="10" data-icon="arrow-l">上一页</a></li>
+          <li><a href="#" id="page_next" pid="2" pz="10" data-icon="arrow-r">下一页</a></li>
+          <li><a href="#" id="page_end" pz="10" data-icon="arrow-r">末页</a></li>
+          <li><a href="#setting" data-transition="flip" data-icon="gear">设置</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+<!--文章内容页面-->
+<div data-role="page" id="content">
+    <div data-role="header" data-position="fixed">
+        <a data-role="button" href="#list" class="gotolist" data-transition="flow" id="content_process"></a>
+        <h1 id="jk_title">离线笑话</h1>
+        <a href="#setting" data-role="button" data-iconpos="notext"  data-transition="flip" data-icon="gear"></a>
+    </div>
+    <div data-role="content">
+        <div id="jk_content" style="white-space: pre;word-wrap:break-word"></div>
+        <div data-role="controlgroup" data-type="horizontal" style="text-align:center">
+            <a data-role="button" data-icon="star" data-iconpos="notext" data-inline="true" id="addToFavBtn">藏</a>
+            <a data-role="button" data-icon="forward" data-iconpos="notext" data-inline="true" id="shareBtn">转</a>
+            <a data-role="button" data-icon="arrow-d" data-iconpos="notext" data-inline="true" id="caiBtn">踩</a>
+            <a data-role="button" data-icon="heart" data-iconpos="notext" data-inline="true" id="dingBtn">赞</a>
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#" id="jk_prev" aid='0' data-icon="arrow-l">前一条</a></li>
+          <li><a href="#" id="jk_next" aid='2' data-icon="arrow-r">下一条</a></li>
+          <li><a href="#morePanel" data-icon="bullets">更多</a></li>
+        </ul>
+      </nav>
+
+    </div>
+    <!--morePanel-->
+    <div data-role="panel" id="morePanel" data-position="right" data-display="overlay" data-dismissible="true" data-theme="a" data-swipe-close="false">
+      <div class="panel-content"><h2>菜单</h2>
+        <ul data-role="listview" data-inset='true' data-dividertheme='b'>
+            <li data-icon="home"><a href="#list" data-transition="flow" class="gotolist">笑话列表</a></li>
+            <li data-icon="gear"><a href="#setting" data-transition="flip">用户设置</a></li>
+            <li data-icon="star"><a href="#favList" fav_pid="1">我的收藏</a></li>
+            <li data-icon="plus"><a href="#addJoke">添加笑话</a></li>
+            <li><a href="#useradd_list" useradd_pid="1">我的笑话</a></li>
+        </ul>
+
+        <div class="ui-field-contain">
+            <label for="setFontSize">字体:</label>
+            <input type="range" name="setFontSize" class="setFontSize" value="14" min="9" max="36" data-highlight="true">
+        </div>
+
+        <div class="ui-field-contain">
+            <label for="setProcessing">进度:</label>
+            <input type="range" name="setProcessing" id="setProcessing" value="1" min="1" max="1" data-highlight="true">
+        </div>
+
+        <a data-rel="close" data-role="button" data-theme="b" data-inline="true" data-icon="delete">关闭菜单</a>
+        
+      </div><!-- /content wrapper for padding -->
+    </div><!--//morePanel-->
+    <!--script src="http://w.lzw.me/plus/ad_js.php?aid=26" type="text/javascript" charset="utf-8"></script-->
+</div>
+<!--用户添加文章列表页面-->
+<div data-role="page" id="useradd_list">
+    <div data-role="header" data-position="fixed">
+        <a href="#list" class="gotolist" data-role="button" data-direction="reverse" id="useradd_list_process"></a>
+        <h1>我添加的笑话</h1>
+        <a href="#addJoke" data-role="button" data-iconpos="notext" data-transition="slideup" data-icon="plus"></a>
+    </div>
+    <div data-role="content">
+        <div id="useradd_resultList"><ul data-role="listview" data-inset='true' data-dividertheme='b' >
+          <li>您还没有添加的内容</li>
+          <li data-icon="plus"><a href="#addJoke" data-transition="slideup">添加笑话</a></li>
+          </ul></div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#" useradd_pid="1" data-icon="user" data-transition="flow">首页</a></li>
+          <li><a href="#" id="useradd_page_prev" useradd_pid="1" data-icon="arrow-l">上一页</a></li>
+          <li><a href="#" id="useradd_page_next" useradd_pid="2" data-icon="arrow-r">下一页</a></li>
+          <li><a href="#" id="useradd_page_end" data-icon="arrow-r">末页</a></li>
+          <li><a href="#setting" data-transition="flip" data-icon="gear">设置</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+<!--用户添加文章内容页面-->
+<div data-role="page" id="useradd_content">
+    <div data-role="header" data-position="fixed">
+        <a data-role="button" href="#useradd_list" data-transition="flow" id="useradd_content_process"></a>
+        <h1 id="jk_title">离线笑话</h1>
+        <a href="#setting" data-role="button" data-iconpos="notext"  data-transition="flip" data-icon="gear"></a>
+    </div>
+    <div data-role="content">
+        <div id="useradd_jk_content" style="white-space: pre;word-wrap:break-word"></div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#" id="useradd_jk_prev" useradd_aid='0' data-icon="arrow-l">前一条</a></li>
+          <li><a href="#" id="useradd_jk_next" useradd_aid='2' data-icon="arrow-r">下一条</a></li>
+          <li><a href="#useradd_morePanel" data-icon="bullets">更多</a></li>
+        </ul>
+      </nav>
+
+    </div>
+    <!--morePanel-->
+    <div data-role="panel" id="useradd_morePanel" data-position="right" data-display="overlay" data-dismissible="true" data-theme="a" data-swipe-close="false">
+      <div class="panel-content"><h2>菜单</h2>
+        <ul data-role="listview" data-inset='true' data-dividertheme='b'>
+            <li data-icon="home"><a href="#list" data-transition="flow" class="gotolist">笑话列表</a></li>
+            <li data-icon="gear"><a href="#setting" data-transition="flip">用户设置</a></li>
+            <li data-icon="star"><a href="#favList" fav_pid="1">我的收藏</a></li>
+            <li data-icon="plus"><a href="#addJoke">添加笑话</a></li>
+            <li><a href="#useradd_list" useradd_pid="1">我的笑话</a></li>
+        </ul>
+
+        <div class="ui-field-contain">
+            <label for="setFontSize">字体:</label>
+            <input type="range" name="setFontSize" class="setFontSize" value="14" min="9" max="36" data-highlight="true">
+        </div>
+
+        <a data-rel="close" data-role="button" data-theme="b" data-inline="true" data-icon="delete">关闭菜单</a>
+        
+      </div><!-- /content wrapper for padding -->
+    </div><!--//morePanel-->
+</div>
+<!--增加本地内容页面-->
+<div data-role="page" id="addJoke">
+    <div data-role="header" data-position="fixed">
+        <a data-role="button" data-iconpos="notext" href="#list" class="gotolist" data-icon="home" data-transition="flow"></a>
+        <h1>添加我的笑话</h1>
+        <a data-role="button"   href="#useradd_list" data-icon="user" data-transition="slidedown" data-iconpos="notext"></a>
+    </div>
+    <div data-role="content">
+        <div class="ui-field-contain">
+            <label for="addJoke_title">标题:</label>
+            <input type="text" name="addJoke_title" id="addJoke_title" value="" placeholder="输入笑话内容，不超过30字" data-clear-btn="true" autofocus>
+        </div>
+        <div class="ui-field-contain">
+            <label for="addJoke_content">内容:</label>
+            <textarea rows="6" name="addJoke_content" id="addJoke_content" placeholder="输入笑话内容，不超过300字" data-autogrow="false"></textarea>
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a class="ui-btn-active" href="#" id="addJokeBtn" data-icon="plus">添加</a></li>
+          <li><a href="#" data-icon="back" data-rel="back" data-direction="reverse">返回</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+<!--修改本地内容页面-->
+<div data-role="page" id="editJoke">
+    <div data-role="header" data-position="fixed">
+        <a data-role="button" data-iconpos="notext"  href="#useradd_list" data-icon="home" data-transition="flow"></a>
+        <h1>修改我的笑话</h1>
+        <a data-role="button"  href="#setting" data-transition="flip" data-icon="gear" data-iconpos="notext"></a>
+    </div>
+    <div data-role="content">
+        <input type="hidden" name="editJoke_title" id="editJoke_id" value="">
+        <div class="ui-field-contain">
+            <label for="editJoke_title">标题:</label>
+            <input type="text" name="editJoke_title" id="editJoke_title" value="" placeholder="输入标题，不超过30字" data-clear-btn="true">
+        </div>
+        <div class="ui-field-contain">
+            <label for="editJoke_content">内容:</label>
+            <textarea rows="6" name="editJoke_content" id="editJoke_content" placeholder="输入内容，不超过300字" data-autogrow="false"></textarea>
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a class="ui-btn-active" href="#" id="editJokeBtn" data-icon="plus">修改</a></li>
+          <li><a href="#" data-icon="back" data-rel="back" data-direction="reverse">返回</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+<!--我的收藏列表页面-->
+<div data-role="page" id="favList">
+    <div data-role="header" data-position="fixed">
+       <a href="#list" class="gotolist" data-role="button" data-direction="reverse" id="fav_list_process"></a>
+        <h1>我的收藏</h1>
+        <a data-rel="back" data-iconpos="notext" data-direction="reverse" data-icon="back"></a>
+    </div>
+    <div data-role="content">
+        <div id="favResultList"><ul data-role="listview" data-inset='true'>
+          <li>您还没有收藏内容</li></ul></div>
+    </div>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#" fav_pid="1" data-icon="star" data-transition="flow">首页</a></li>
+          <li><a href="#" id="fav_page_prev" fav_pid="1" pz="10" data-icon="arrow-l">上一页</a></li>
+          <li><a href="#" id="fav_page_next" fav_pid="2" pz="10" data-icon="arrow-r">下一页</a></li>
+          <li><a href="#" id="fav_page_end" pz="10" data-icon="arrow-r">末页</a></li>
+          <li><a href="#setting" data-transition="flip" data-icon="gear">设置</a></li>
+        </ul>
+      </nav>
+    </div>
+</div>
+
+<!--设置-->
+<div data-role="page" id="setting">
+    <div data-role="header" data-position="fixed">
+        <h1>设置</h1>
+        <a data-rel="back" data-iconpos="notext" data-direction="reverse" data-icon="back"></a>
+    </div>
+    <div data-role="content">
+      <div id="gearList">
+        <ul data-role='listview' data-inset='true' data-theme='a' data-dividertheme='b'>
+        <li><a href="#list" data-transition="flow" class="gotolist">笑话列表</a></li>
+        <li><a href="#" id="latestaidBtn">上次阅读</a></li>
+        <li><a href="#favList" fav_pid="1">我的收藏</a></li>
+        <li><a href="#addJoke">添加笑话</a></li>
+        <li><a href="#useradd_list" useradd_pid="1">我的笑话</a></li>
+        <li><a href="#aboutus" data-transition="flow">关于我们</a></li>
+        <li>仅wifi显广告：<input type="checkbox" id="showAdOnlyWifi" data-role="flipswitch"></li>
+      </ul>
+      <a id="killAd" data-role="button" data-icon="cloud">关闭广告</a>
+      <div data-role="controlgroup" data-type="horizontal" style="text-align:center">
+          <a id="exitApp" data-role="button" data-theme="b" data-icon="power" data-inline="true">退出</a>
+          <a data-role="button" data-theme="b" data-icon="back" data-rel="back" data-inline="true">返回</a>
+    </div>
+     </div>
+    </div>
+</div><!--//设置-->
+
+<!--关于-->
+<div data-role="page" id="aboutus">
+    <div data-role="header" data-position="fixed">
+        <h1>关于</h1> 
+    </div>
+    <div data-role="content">
+      <div data-role="collapsible-set">
+          <div data-role="collapsible" data-collapsed="false">
+            <h3>应用简介</h3>
+            <p>离线笑话是一个以不消耗流量看笑话为目的开发的娱乐应用，实乃公交地铁蹲厕之娱乐利器。</p>
+            <p>应用初始包含精选笑话 10000 篇，您亦可添加自己喜欢的笑话、上传分享自己添加的笑话。此外，还可
+            选择更新服务器的最新笑话包。对于您喜欢的笑话，您使劲赞；对于您认为无聊的笑话，可以一踩到底！您的一赞一采，将有助于10000篇精选笑话的质量之挑选哦！</p>
+            <p>该应用的开发花费了大量的个人业余时间，为支撑继续开发动力，在应用启动时可能会加载广告，如广告内容不符合您的需求，点击关闭即可，敬请谅解。</p>
+            <p>感谢您对本应用的支持，欢迎提出您的宝贵意见和建议！</p>
+          </div>
+         
+          <div data-role="collapsible">
+            <h3>版权信息</h3>
+            <p>名称：离线笑话</p>
+            <p>开发：志文工作室</p>
+            <p>支持：http://lxxh.lzw.me</p>
+            <p>联系：<a href="mailto:webmaster@lzw.me?subject=离线笑话意见反馈">webmaster@lzw.me</a></p>
+          </div>
+         
+          <div data-role="collapsible">
+            <h3>版本更新</h3>
+            <a data-role="button" data-icon="cloud" id="checkUpdateBtn">检查更新</a>
+          </div>
+         
+      </div>
+      <a data-role="button" data-theme="b" data-icon="back" data-rel="back">返回</a>
+     </div>
+    </div>
+</div><!--//关于-->
+</body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.lzw.joke" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>离线笑话</name>
+    <description>
+        离线笑话，不费流量乐翻天.
+    </description>
+    <author email="l@lzw.me" href="http://lxxh.lzw.me">
+        志文工作室
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="splashscreen" value="screen" />
+    <preference name="SplashScreenDelay" value="20000" />
+</widget>

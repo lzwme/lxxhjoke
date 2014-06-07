@@ -1,0 +1,23 @@
+CACHE MANIFEST  
+ 
+# version 14.06.02.1537  for update
+ 
+# 直接缓存的文件
+CACHE:
+	img/logo.png
+	img/icon/320x460.png
+	img/icon/640x920.png
+	img/icon/768x1004.png
+
+	lib/jquery.mobile/images/ajax-loader.gif
+	lib/jquery/jquery-2.1.1.min.js
+	lib/jquery.mobile/jquery.mobile-1.4.1.min.css
+	lib/jquery.mobile/jquery.mobile-1.4.1.min.js
+ 
+	js/index.js
+
+# 需要在时间在线的文件  
+NETWORK:
+	data/*
+# 替代方案  
+FALLBACK:  
